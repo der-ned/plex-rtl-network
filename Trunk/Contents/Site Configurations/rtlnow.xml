@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Define SITE & FLASH-Player -->
+
+<site	site		="http://rtl-now.rtl.de"
+	plugin		="http://rtl-now.rtl.de/includes/vodplayer.swf*"
+	initialState	="loading"
+	version		="1.0">
+
+<!-- Define FLASH Video size -->
+<!--NOTE: We use NEGATIVE numbers in sizes & coordinates to measure relative to -->
+<!--      the BOTTOM of the video, as we have to deal with TWO different sized flash -->
+
+	<crop x="0" y="0" width="720" height="540" />
+
+<!-- Define Seekbar -->
+<!-- Will make seekbar work with SMALL flash videos. as these are the most -->
+
+	<seekbar type="thumb">
+		<start x="112" y="-23" />
+		<end   x="521" y="-23" />
+		<played>
+			<color rgb="102f7f" /> <!-- e6ebef -->
+		</played>
+	</seekbar>
+
+<!-- Set Colors for Paused Video -->
+
+	<condition name="paused">
+		<or>
+			<!-- color x="37"  y="-23" rgb="ffffff" / -->
+			<color x="360"  y="167" rgb="E3172B" />
+			<color x="528"  y="180" rgb="E3172B" />
+		</or>
+	</condition>
+
+<!-- Set Colors for Playing Video -->
+
+	<condition name="laeuft">
+
+		<or>
+			<color x="37"  y="-23" rgb="082c68" />
+		</or>
+
+	</condition>
+
+<!-- INITIALIZE -->
+	<state name="loading">
+		<event>
+
+     			<condition>
+				<condition name="paused" />
+      			</condition>
+
+     			 <action>
+        			<click x="380" y="37"/>
+      			</action>
+
+    		</event>
+
+		<!-- Video Started -->
+		<event>
+
+     			<condition>
+				<condition name="laeuft" />
+      			</condition>
+
+     			 <action>
+        			<goto state="playing"/>
+      			</action>
+
+    		</event>
+	</state>
+<!-- Video Started -->
+
+<!-- PLAYING START -->
+	<state name="playing">
+
+		<!-- Click to pause -->
+		<event>
+
+			<condition>
+				<command name="pause" />
+			</condition>
+
+			<action>
+				<click x="380" y="37" />
+			</action>
+
+		</event>
+
+		<!-- Detect paused video -->
+		<event>
+
+			<condition>
+				<condition name="paused" />
+			</condition>
+
+			<action>
+				<goto state="paused" />
+			</action>
+
+		</event>
+
+		<!-- Video ends -->
+		<event>
+
+			<condition>
+				<or>
+					<color x="500" y="-23" rgb="e6ebef" />
+					<color x="500" y="-23" rgb="dadfe3" />
+					<color x="500" y="-23" rgb="dce0e5" />
+					<color x="500" y="-23" rgb="dfe3e8" />
+					<color x="570" y="194" rgb="2d4156" />
+					<color x="570" y="194" rgb="293d53" />
+					<color x="570" y="194" rgb="24394f" />
+					<color x="570" y="194" rgb="2d4156" />
+					<color x="570" y="194" rgb="2f4358" />
+				</or>
+			</condition>
+
+			<action>
+				<goto state="end" />
+			</action>
+
+		</event>
+
+	</state>
+<!-- PLAYING END -->
+
+
+<!-- PAUSED START -->
+	<state name="paused">
+
+		<event>
+
+			<condition>
+				<command name="play" />
+			</condition>
+
+			<action>
+				<click x="380" y="37" />
+			</action>
+
+		</event>
+
+		<!-- Success ? ==> Go To Playing -->
+		<event>
+
+			<condition>
+				<condition name="laeuft" />
+			</condition>
+
+			<action>
+				<goto state="playing" />
+			</action>
+
+		</event>
+
+	</state>
+<!-- PAUSED END -->
+
+</site>
